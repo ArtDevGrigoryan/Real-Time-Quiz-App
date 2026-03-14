@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  username      String   @unique
+  password      String
+  role          Role     @default(USER)
+  refresh_token String?
+  createdAt     DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model SessionTemplate {
+  id         String     @id @default(cuid())
+  name       String
+  activities Activity[]
+  sessions   Session[]
+  createdAt  DateTime   @default(now())
+}
+
+model Activity {
+  id          String   @id @default(cuid())
+  templateId  String
+  template    SessionTemplate @relation(fields: [templateId], references: [id])
+
+  type        ActivityType
+  title       String
+  description String?
+  order       Int
+
+  timerSeconds     Int?
+  fragmentsCount   Int?
+  pointsPerCorrect Int?
+
+  questions   Question[]
+  answers     ActivityAnswer[]
+
+  createdAt   DateTime @default(now())
+}
+
+enum ActivityType {
+  QUIZ
+  PUZZLE_ASSEMBLY
+}
+
+model Question {
+  id         String   @id @default(cuid())
+  activityId String
+  activity   Activity @relation(fields: [activityId], references: [id])
+
+  text       String
+  correctIdx Int
+  timeLimit  Int
+  order      Int
+
+  options    Option[]
+  answers    ParticipantAnswer[]
+}
+
+model Option {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+
+  text       String
+}
+
+model Session {
+  id                   String         @id @default(cuid())
+  templateId           String
+  template             SessionTemplate @relation(fields: [templateId], references: [id])
+
+  roomCode             String         @unique
+  maxParticipants      Int
+  status               SessionStatus  @default(WAITING)
+
+  createdAt            DateTime       @default(now())
+
+  participants         Participant[]
+  currentActivityIndex Int            @default(0)
+}
+
+enum SessionStatus {
+  WAITING
+  ACTIVE
+  FINISHED
+}
+
+model Participant {
+  id        String   @id @default(cuid())
+  name      String
+
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  score     Int      @default(0)
+  joinedAt  DateTime @default(now())
+
+  answers          ParticipantAnswer[]
+  activityAnswers  ActivityAnswer[]
+}
+
+model ParticipantAnswer {
+  id            String      @id @default(cuid())
+
+  participantId String
+  questionId    String
+
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  question      Question    @relation(fields: [questionId], references: [id])
+
+  selectedIdx   Int
+  isCorrect     Boolean
+  score         Int
+
+  answeredAt    DateTime @default(now())
+
+  @@unique([participantId, questionId])
+}
+
+model ActivityAnswer {
+  id            String      @id @default(cuid())
+
+  participantId String
+  activityId    String
+
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  activity      Activity    @relation(fields: [activityId], references: [id])
+
+  correctCount  Int?
+  score         Int
+
+  createdAt     DateTime @default(now())
+
+  @@unique([participantId, activityId])
+}
