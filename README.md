@@ -141,6 +141,8 @@ This prevents timer desynchronization across clients.
 ```bash
 cd backend/
 npm i
+npx prisma generate
+npx prisma db push
 npm run seed
 npm run dev
 ```

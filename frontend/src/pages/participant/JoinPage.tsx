@@ -39,8 +39,8 @@ export const JoinPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
-      <Card className="max-w-md w-full p-8 rounded-3xl shadow-2xl space-y-6 bg-neutral-100 dark:bg-neutral-800 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gray-50 dark:bg-gray-900 p-6 gap-6">
+      <Card className="max-w-md w-full p-10 rounded-3xl shadow-2xl space-y-6 bg-neutral-100 dark:bg-neutral-800 transition-colors duration-300">
         <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center">
           Join a Session
         </h2>
@@ -61,14 +61,14 @@ export const JoinPage: React.FC = () => {
             value={roomCode}
             onChange={(e) => setRoomCode(e.target.value)}
             disabled={loading}
-            className="focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-all duration-200"
+            className="focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-all duration-200 rounded-xl"
           />
           <Input
             placeholder="Nickname"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={loading}
-            className="focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-all duration-200"
+            className="focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition-all duration-200 rounded-xl"
           />
         </div>
 
@@ -84,6 +84,16 @@ export const JoinPage: React.FC = () => {
           Enter the session ID and your nickname to join a live session
         </p>
       </Card>
+
+      {/* Admin login button */}
+      <div className="flex justify-center">
+        <Button
+          onClick={() => navigate("/admin/login")}
+          className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white py-3 px-6 rounded-2xl shadow-md transition-all duration-200"
+        >
+          Login as Admin
+        </Button>
+      </div>
     </div>
   );
 };

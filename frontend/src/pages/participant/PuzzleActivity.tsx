@@ -49,12 +49,9 @@ export default function PuzzleActivity({
   const toggleFragment = (index: number) => {
     if (answered || timer <= 0) return;
 
-    setSelected((prev) => {
-      if (prev.includes(index)) {
-        return prev.filter((i) => i !== index);
-      }
-      return [...prev, index];
-    });
+    setSelected((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+    );
   };
 
   const submitScore = () => {
@@ -64,7 +61,6 @@ export default function PuzzleActivity({
         activityId: activity.id,
         correctCount: selected.length,
       });
-
       onAnswered(true);
     } catch (err: any) {
       setError(err.message || "Failed to submit score");
@@ -78,9 +74,9 @@ export default function PuzzleActivity({
       )}
 
       {!connected ? (
-        <p className="text-gray-400">Connecting...</p>
+        <p className="text-gray-400 text-lg animate-pulse">Connecting...</p>
       ) : (
-        <Card className="max-w-md w-full p-6 space-y-6 bg-neutral-800 border border-neutral-700 rounded-3xl shadow-2xl">
+        <Card className="max-w-md w-full p-6 space-y-6 bg-neutral-800 border border-neutral-700 rounded-3xl shadow-2xl transition-transform transform hover:scale-[1.01]">
           <h2 className="text-3xl font-extrabold text-center text-gray-100">
             {activity.title}
           </h2>
@@ -102,10 +98,10 @@ export default function PuzzleActivity({
                   key={i}
                   disabled={answered || timer <= 0}
                   onClick={() => toggleFragment(i)}
-                  className={`py-3 px-4 rounded-2xl border transition-all
+                  className={`py-3 px-4 rounded-2xl border transition-all duration-200
                     ${
                       active
-                        ? "bg-blue-500 border-blue-400 text-white"
+                        ? "bg-blue-500 border-blue-400 text-white shadow-lg"
                         : "bg-neutral-700/50 border-neutral-600 hover:bg-neutral-700"
                     }
                     ${answered ? "cursor-not-allowed opacity-60" : ""}
@@ -124,7 +120,7 @@ export default function PuzzleActivity({
           <Button
             disabled={answered || timer <= 0}
             onClick={submitScore}
-            className={`w-full py-3 rounded-2xl font-semibold transition-all
+            className={`w-full py-3 rounded-2xl font-semibold transition-all duration-200
               ${
                 answered || timer <= 0
                   ? "bg-neutral-700 cursor-not-allowed"

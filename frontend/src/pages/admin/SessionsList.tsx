@@ -24,6 +24,7 @@ export default function SessionsList() {
       setError(err.data || "something went wrong");
     }
   };
+
   const getSessions = async () => {
     setLoading(true);
     setError(null);
@@ -54,104 +55,125 @@ export default function SessionsList() {
   };
 
   return (
-    <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">
-        Sessions
-      </h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-6 py-10">
+      <div className="max-w-6xl mx-auto space-y-10">
+        {/* Header */}
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          Sessions
+        </h1>
 
-      {/* Error Toast */}
-      {error && (
-        <Toast
-          message={error}
-          type="error"
-          onClose={() => setError(null)}
-          ttl={3000}
-        />
-      )}
-
-      {/* Create Session */}
-      <Card className="flex flex-col md:flex-row items-center gap-4 p-6 bg-neutral-100 dark:bg-neutral-800 rounded-3xl shadow-2xl">
-        <div className="flex flex-col md:flex-row gap-4 items-center w-full">
-          <Label
-            htmlFor="maxParticipants"
-            className="whitespace-nowrap font-medium"
-          >
-            Max Participants
-          </Label>
-          <Input
-            id="maxParticipants"
-            type="number"
-            min={2}
-            max={100}
-            value={maxParticipants}
-            onChange={(e) => setMaxParticipants(Number(e.target.value))}
-            className="w-24"
+        {/* Error Toast */}
+        {error && (
+          <Toast
+            message={error}
+            type="error"
+            onClose={() => setError(null)}
+            ttl={3000}
           />
-          <Button
-            className="flex-1 md:flex-none bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-2 px-6 rounded-2xl shadow-md transition-all duration-200"
-            onClick={handleCreateSession}
-          >
-            Create Session
-          </Button>
-        </div>
-      </Card>
+        )}
 
-      {/* Loading */}
-      {loading && (
-        <p className="text-gray-500 dark:text-gray-400 text-center">
-          Loading sessions...
-        </p>
-      )}
+        {/* Create Session */}
+        <Card className="p-6 rounded-3xl shadow-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <Label
+              htmlFor="maxParticipants"
+              className="whitespace-nowrap font-medium text-gray-700 dark:text-gray-300"
+            >
+              Max Participants
+            </Label>
 
-      {/* Sessions List */}
-      {!loading && sessions.length === 0 && (
-        <p className="text-gray-500 dark:text-gray-400 text-center italic">
-          No sessions yet.
-        </p>
-      )}
+            <Input
+              id="maxParticipants"
+              type="number"
+              min={2}
+              max={100}
+              value={maxParticipants}
+              onChange={(e) => setMaxParticipants(Number(e.target.value))}
+              className="w-28"
+            />
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {sessions.map((session) => (
-          <Card
-            key={session.id}
-            className="p-6 flex flex-col justify-between bg-neutral-100 dark:bg-neutral-800 rounded-3xl shadow-2xl space-y-4 transition hover:scale-[1.01]"
-          >
-            <div className="space-y-2">
-              <p className="font-semibold text-gray-900 dark:text-white text-lg">
-                Room Code:{" "}
-                <span className="font-bold text-blue-600 dark:text-blue-400">
-                  {session.roomCode}
-                </span>
-              </p>
-              <p className="text-gray-600 dark:text-gray-300">
-                Participants: {session.participants?.length || 0}/
-                {session.maxParticipants}
-              </p>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">
-                Status: <span className="capitalize">{session.status}</span> |
-                Created: {new Date(session.createdAt).toLocaleString()}
-              </p>
-            </div>
+            <Button
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl shadow"
+              onClick={handleCreateSession}
+            >
+              Create Session
+            </Button>
+          </div>
+        </Card>
 
-            <div className="flex gap-3 mt-2">
-              <Link
-                to={`/admin/session/${session.id}`}
-                className="flex-1 text-center bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white py-2 rounded-xl font-medium transition-all duration-200"
-              >
-                Lobby
-              </Link>
-              {session.status === "FINISHED" && (
+        {/* Loading */}
+        {loading && (
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            Loading sessions...
+          </p>
+        )}
+
+        {/* Empty */}
+        {!loading && sessions.length === 0 && (
+          <p className="text-center text-gray-500 dark:text-gray-400 italic">
+            No sessions yet.
+          </p>
+        )}
+
+        {/* Sessions Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sessions.map((session) => (
+            <Card
+              key={session.id}
+              className="p-6 bg-white dark:bg-neutral-800 rounded-3xl shadow-xl border border-neutral-200 dark:border-neutral-700 flex flex-col justify-between space-y-4 hover:shadow-2xl transition"
+            >
+              <div className="space-y-2">
+                <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Room Code:{" "}
+                  <span className="text-blue-600 dark:text-blue-400 font-bold tracking-wide">
+                    {session.roomCode}
+                  </span>
+                </p>
+
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  Participants: {session.participants?.length || 0}/
+                  {session.maxParticipants}
+                </p>
+
+                <p className="text-gray-500 dark:text-gray-400 text-xs">
+                  Status:{" "}
+                  <span className="capitalize font-medium">
+                    {session.status}
+                  </span>
+                </p>
+
+                <p className="text-gray-500 dark:text-gray-400 text-xs">
+                  Created: {new Date(session.createdAt).toLocaleString()}
+                </p>
+              </div>
+
+              <div className="flex gap-2 pt-2">
                 <Link
-                  to={`/admin/session/${session.id}/results`}
-                  className="flex-1 text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white py-2 rounded-xl font-medium transition-all duration-200"
+                  to={`/admin/session/${session.id}`}
+                  className="flex-1 text-center bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl text-sm font-medium transition"
                 >
-                  Results
+                  Lobby
                 </Link>
-              )}
-              <Button onClick={() => handleDelete(session.id)}>Delete</Button>
-            </div>
-          </Card>
-        ))}
+
+                {session.status === "FINISHED" && (
+                  <Link
+                    to={`/admin/session/${session.id}/results`}
+                    className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl text-sm font-medium transition"
+                  >
+                    Results
+                  </Link>
+                )}
+
+                <Button
+                  onClick={() => handleDelete(session.id)}
+                  className="bg-red-600 hover:bg-red-700 text-white px-3 rounded-xl text-sm"
+                >
+                  Delete
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );

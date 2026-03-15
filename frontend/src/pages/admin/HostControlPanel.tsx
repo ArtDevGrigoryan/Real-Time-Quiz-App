@@ -143,10 +143,11 @@ export default function HostControlPanel() {
   );
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-gray-100 p-6 md:p-10">
+    <div className="min-h-screen bg-neutral-950 text-neutral-100">
       {error && (
         <Toast type="error" message={error} onClose={() => setError(null)} />
       )}
+
       {leaderboard.length ? (
         <LeaderBoard leaderboards={leaderboard} isAdmin={true} />
       ) : (
@@ -160,92 +161,106 @@ export default function HostControlPanel() {
         )
       )}
 
-      <div className="max-w-6xl mx-auto space-y-10">
+      <div className="max-w-7xl mx-auto px-6 py-10 space-y-10">
         {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
-            Host Panel
-          </h1>
-          <div className="text-3xl font-extrabold text-blue-400">{timer}s</div>
+        <div className="flex items-center justify-between">
+          <h1 className="text-4xl font-bold tracking-tight">Host Control</h1>
+
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-neutral-400">Timer</span>
+            <div className="bg-blue-500/10 border border-blue-500/30 px-6 py-2 rounded-xl text-2xl font-bold text-blue-400">
+              {timer}s
+            </div>
+          </div>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Activity Card */}
-          <Card className="p-6 bg-neutral-800 border border-neutral-700 rounded-3xl shadow-2xl space-y-4 hover:scale-[1.02] transition-transform duration-200">
-            <h2 className="text-xl font-semibold text-gray-200">Activity</h2>
+        {/* Main Layout */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Activity */}
+          <Card className="p-6 bg-neutral-900 border border-neutral-800 rounded-2xl shadow-lg space-y-4">
+            <h2 className="text-lg font-semibold text-neutral-200">Activity</h2>
+
             {activity ? (
-              <div className="space-y-2 text-sm text-gray-300">
-                <div>
-                  <span className="font-medium text-gray-100">Title:</span>{" "}
-                  {activity.title}
+              <div className="space-y-2 text-sm text-neutral-300">
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Title</span>
+                  <span>{activity.title}</span>
                 </div>
-                <div>
-                  <span className="font-medium text-gray-100">Type:</span>{" "}
-                  {activity.type}
+
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Type</span>
+                  <span>{activity.type}</span>
                 </div>
-                <div>
-                  <span className="font-medium text-gray-100">Order:</span>{" "}
-                  {activity.order}
+
+                <div className="flex justify-between">
+                  <span className="text-neutral-400">Order</span>
+                  <span>{activity.order}</span>
                 </div>
+
                 {activity.pointsPerCorrect && (
-                  <div>
-                    <span className="font-medium text-gray-100">
-                      Points/Correct:
-                    </span>{" "}
-                    {activity.pointsPerCorrect}
+                  <div className="flex justify-between">
+                    <span className="text-neutral-400">Points</span>
+                    <span>{activity.pointsPerCorrect}</span>
                   </div>
                 )}
+
                 {activity.timerSeconds && (
-                  <div>
-                    <span className="font-medium text-gray-100">Timer:</span>{" "}
-                    {activity.timerSeconds}s
+                  <div className="flex justify-between">
+                    <span className="text-neutral-400">Timer</span>
+                    <span>{activity.timerSeconds}s</span>
                   </div>
                 )}
+
                 {activity.fragmentsCount && (
-                  <div>
-                    <span className="font-medium text-gray-100">
-                      Fragments:
-                    </span>{" "}
-                    {activity.fragmentsCount}
+                  <div className="flex justify-between">
+                    <span className="text-neutral-400">Fragments</span>
+                    <span>{activity.fragmentsCount}</span>
                   </div>
                 )}
               </div>
             ) : (
-              <p className="text-gray-400 italic">No activity loaded</p>
+              <p className="text-neutral-500 italic">No activity loaded</p>
             )}
           </Card>
 
-          {/* Question Card */}
-          <Card className="p-6 bg-neutral-800 border border-neutral-700 rounded-3xl shadow-2xl space-y-4 hover:scale-[1.02] transition-transform duration-200">
-            <h2 className="text-xl font-semibold text-gray-200">Question</h2>
+          {/* Question */}
+          <Card className="p-6 bg-neutral-900 border border-neutral-800 rounded-2xl shadow-lg space-y-4">
+            <h2 className="text-lg font-semibold text-neutral-200">Question</h2>
+
             {question ? (
-              <div className="space-y-2 text-sm text-gray-300">
-                <div className="text-base font-medium">{question.text}</div>
-                <div className="text-gray-400">
+              <div className="space-y-3">
+                <p className="text-neutral-100 text-base">{question.text}</p>
+
+                <div className="text-sm text-neutral-400">
                   Duration: {question.timeLimit}s
                 </div>
               </div>
             ) : (
-              <p className="text-gray-400 italic">No question loaded</p>
+              <p className="text-neutral-500 italic">No question loaded</p>
             )}
           </Card>
 
-          {/* Participants Card */}
-          <Card className="p-6 bg-neutral-800 border border-neutral-700 rounded-3xl shadow-2xl space-y-4 hover:scale-[1.02] transition-transform duration-200">
-            <h2 className="text-xl font-semibold text-gray-200">
+          {/* Participants */}
+          <Card className="p-6 bg-neutral-900 border border-neutral-800 rounded-2xl shadow-lg space-y-4">
+            <h2 className="text-lg font-semibold text-neutral-200">
               Participants
             </h2>
+
             {sortedParticipants.length ? (
-              <div className="space-y-2">
+              <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
                 {sortedParticipants.map((p, i) => (
                   <div
                     key={p.id}
-                    className="flex justify-between items-center bg-neutral-700/50 px-4 py-2 rounded-xl hover:bg-neutral-700/70 transition-colors"
+                    className="flex items-center justify-between bg-neutral-800 hover:bg-neutral-700 transition px-4 py-2 rounded-xl"
                   >
-                    <span className="text-gray-100 font-medium">
-                      {i + 1}. {p.name}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-neutral-500 w-5">
+                        {i + 1}
+                      </span>
+
+                      <span className="font-medium">{p.name}</span>
+                    </div>
+
                     <span
                       className={`font-semibold ${
                         questionAnsweredId.includes(p.id)
@@ -259,16 +274,16 @@ export default function HostControlPanel() {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-400 italic">No participants yet</p>
+              <p className="text-neutral-500 italic">No participants yet</p>
             )}
           </Card>
         </div>
 
-        {/* Next Button */}
-        <div className="flex justify-center">
+        {/* Controls */}
+        <div className="flex justify-center pt-4">
           <Button
-            className="bg-blue-500 hover:bg-blue-600 px-12 py-4 text-lg rounded-2xl shadow-xl transition-all duration-200"
             onClick={handleNext}
+            className="px-10 py-4 text-lg rounded-xl bg-blue-600 hover:bg-blue-700 transition shadow-lg"
           >
             Next Question
           </Button>
